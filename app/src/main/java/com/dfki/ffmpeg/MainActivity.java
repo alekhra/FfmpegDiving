@@ -1,4 +1,4 @@
-package com.dfki.gfgffmpeg;
+package com.dfki.ffmpeg;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;

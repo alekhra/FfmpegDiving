@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/GfgFFmpeg.iml" filepath="$PROJECT_DIR$/.idea/modules/GfgFFmpeg.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/GfgFFmpeg.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/GfgFFmpeg.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FfmpegDiving.iml" filepath="$PROJECT_DIR$/.idea/modules/FfmpegDiving.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FfmpegDiving.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FfmpegDiving.app.iml" />
     </modules>
   </component>
 </project>

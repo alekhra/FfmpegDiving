@@ -1,2 +1,2 @@
-rootProject.name='GfgFFmpeg'
+rootProject.name='FfmpegDiving'
 include ':app'

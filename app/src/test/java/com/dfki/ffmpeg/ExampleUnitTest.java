@@ -1,4 +1,4 @@
-package com.dfki.gfgffmpeg;
+package com.dfki.ffmpeg;
 
 import org.junit.Test;
 

@@ -1,5 +1,5 @@
 
-        package com.dfki.gfgffmpeg;
+        package com.dfki.ffmpeg;
 
         import android.content.ContentUris;
         import android.content.Context;

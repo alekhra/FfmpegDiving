@@ -5,7 +5,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.dfki.gfgffmpeg"
+        applicationId "com.dfki.ffmpeg"
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
