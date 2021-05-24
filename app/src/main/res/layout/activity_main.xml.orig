@@ -2,31 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#43AF47"
+    android:background="#005599"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
 
-
     <RelativeLayout
-        android:layout_margin="10dp"
         android:id="@+id/relative1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        >
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="10dp">
+
         <Button
+            android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:layout_centerInParent="true"
             android:background="@color/transparent"
-            android:text="Select Video"
-            android:id="@+id/cancel_button"/>
-
+            android:text=" Select Video "
+            android:textColor="@color/white" />
     </RelativeLayout>
-
 
     <VideoView
         android:layout_below="@+id/relative1"
@@ -58,7 +56,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:text="Raghav"/>
+            android:text="Pramod"/>
         <ImageView
             android:layout_centerInParent="true"
             android:layout_width="match_parent"
@@ -143,72 +141,135 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
-                    <LinearLayout
-                        android:layout_margin="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        >
-                        <ImageButton
 
-                            android:id="@+id/slow"
-                            android:layout_gravity="center"
-                            android:background="@color/transparent"
-                            android:scaleType="fitXY"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/icon_effect_slow"/>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Slow Motion"
-                            android:textAlignment="center"
-                            android:textColor="@color/white"/>
-                    </LinearLayout>
+
                     <LinearLayout
+                        android:layout_width="1dp"
+                        android:layout_height="77dp"
                         android:layout_margin="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_weight="1"
-                        >
+                        android:orientation="vertical">
+
                         <ImageButton
                             android:id="@+id/reverse"
+                            android:layout_width="55dp"
+                            android:layout_height="51dp"
                             android:layout_gravity="center"
                             android:background="@color/transparent"
                             android:scaleType="fitXY"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/icon_effect_time"/>
+                            android:src="@drawable/icon_play" />
+<!--                        <ImageButton-->
+<!--                            android:id="@+id/reverse"-->
+<!--                            android:layout_width="50dp"-->
+<!--                            android:layout_height="50dp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:background="@color/transparent"-->
+<!--                            android:scaleType="fitXY"-->
+<!--                            android:src="@drawable/icon_effect_time" />-->
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Reverse"
+                            android:text="Play"
                             android:textAlignment="center"
-                            android:textColor="@color/white"/>
+                            android:textColor="@color/white" />
                     </LinearLayout>
+
                     <LinearLayout
+                        android:layout_width="1dp"
+                        android:layout_height="77dp"
                         android:layout_margin="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_weight="1"
-                        >
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/reverse"
+                            android:layout_width="46dp"
+                            android:layout_height="44dp"
+                            android:layout_gravity="center"
+                            android:background="@color/transparent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/icon_stop" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Stop"
+                            android:textAlignment="center"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="10dp"
+                        android:layout_height="73dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/slow"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:background="@color/transparent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/icon_effect_slow" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="    Motion"
+                            android:textAlignment="center"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="1dp"
+                        android:layout_height="77dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/reverse"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:background="@color/transparent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/icon_effect_time" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Process"
+                            android:textAlignment="center"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="27dp"
+                        android:layout_height="73dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
                         <ImageButton
                             android:id="@+id/fast"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:layout_gravity="center"
                             android:background="@color/transparent"
                             android:scaleType="fitXY"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/icon_effect_repeatedly"/>
+                            android:src="@drawable/icon_effect_repeatedly" />
+
                         <TextView
-                            android:textAlignment="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Flash"
-                            android:textColor="@color/white"/>
+                            android:text="Keypoints"
+                            android:textAlignment="center"
+                            android:textColor="@color/white" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -219,14 +280,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/text2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tap to add effects"
-                    android:textColor="@color/white"
                     android:layout_marginBottom="10dp"
-                    />
+                    android:text="Process Video"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
         </RelativeLayout>

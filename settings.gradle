@@ -1,2 +1,2 @@
-rootProject.name='FfmpegDiving'
+rootProject.name='DSV'
 include ':app'

@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private Runnable r;
     private RangeSeekBar rangeSeekBar;
     private static final String root= Environment.getExternalStorageDirectory().toString();
-    private static final String app_folder=root+"/DSV/";
+    private static final String app_folder=root+"/GFG/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 } else
-                    Toast.makeText(MainActivity.this, "Please select video", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Please upload video", Toast.LENGTH_SHORT).show();
             }
         });
         reverse.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 } else
-                    Toast.makeText(MainActivity.this, "Please select video", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Please upload video", Toast.LENGTH_SHORT).show();
             }
         });
 
