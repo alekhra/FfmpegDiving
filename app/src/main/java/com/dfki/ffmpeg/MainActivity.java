@@ -30,8 +30,8 @@ import static com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageButton reverse,slow,fast;
-    private Button cancel;
+    private ImageButton process,slow,fast,play,stop;
+    private Button select_video;
     private TextView tvLeft,tvRight;
     private ProgressDialog progressDialog;
     private String video_url;
@@ -50,11 +50,15 @@ public class MainActivity extends AppCompatActivity {
         tvLeft = (TextView) findViewById(R.id.textleft);
         tvRight = (TextView) findViewById(R.id.textright);
         slow = (ImageButton) findViewById(R.id.slow);
-        reverse = (ImageButton) findViewById(R.id.reverse);
+        process = (ImageButton) findViewById(R.id.process);
         fast = (ImageButton) findViewById(R.id.fast);
-        cancel = (Button) findViewById(R.id.cancel_button);
+        select_video = (Button) findViewById(R.id.select_video);
         fast = (ImageButton) findViewById(R.id.fast);
         videoView=(VideoView) findViewById(R.id.layout_movie_wrapper);
+        play = findViewById(R.id.play);
+        stop = findViewById(R.id.stop);
+        play.setEnabled(false);
+        stop.setEnabled(false);
 
         //creating the progress dialog
         progressDialog = new ProgressDialog(MainActivity.this);
@@ -63,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
 
         //set up the onClickListeners
-        cancel.setOnClickListener(new View.OnClickListener() {
+        select_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //create an intent to retrieve the video file from the device storage
@@ -72,6 +76,26 @@ public class MainActivity extends AppCompatActivity {
                         android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("video/*");
                 startActivityForResult(intent, 123);
+                play.setEnabled(true);
+                stop.setEnabled(true);
+            }
+        });
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                videoView.setVideoURI(Uri.parse(video_url));
+                videoView.start();
+                //startActivityForResult(intent, 123);
+            }
+        });
+
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                videoView.setVideoURI(Uri.parse(video_url));
+                videoView.stopPlayback();
+                //startActivityForResult(intent, 123);
             }
         });
 
@@ -110,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please select video", Toast.LENGTH_SHORT).show();
             }
         });
-        reverse.setOnClickListener(new View.OnClickListener() {
+        process.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (video_url != null) {
