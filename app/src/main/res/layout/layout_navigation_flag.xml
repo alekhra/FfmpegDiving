@@ -11,7 +11,7 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View Type"
+        android:text="Matrices"
         android:textAllCaps="true"/>
 
     <TextView
@@ -43,7 +43,7 @@
                     android:textAllCaps="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Camera View"
+                    android:text="Center Of Mass"
                     />
             </LinearLayout>
             <LinearLayout
@@ -62,7 +62,7 @@
                     android:textAllCaps="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Video View"
+                    android:text="3D Mask"
                     />
             </LinearLayout>
         </LinearLayout>

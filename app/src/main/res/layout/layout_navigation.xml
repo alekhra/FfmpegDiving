@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tracking Type"
+                android:text="Settings"
                 android:textColor="#434242"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -100,14 +100,7 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_height="0.3dp"
-        android:background="@drawable/single_line"/>
+
     <LinearLayout
         android:layout_marginLeft="20dp"
         android:layout_width="match_parent"
@@ -136,8 +129,81 @@
                 android:text="Face Detection"
                 android:gravity="center"
                 android:layout_gravity="center"/>
+
         </RelativeLayout>
     </LinearLayout>
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="0.3dp"
+        android:background="@drawable/single_line"/>
+    <LinearLayout
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:paddingLeft="10dp"
+            android:background="@drawable/nav_option_background"
+            android:id="@+id/nav_camera"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/img6"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/navicon1"/>
+            <TextView
+                android:layout_marginLeft="25dp"
+                android:layout_toRightOf="@+id/img6"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Camera View"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:paddingLeft="10dp"
+            android:background="@drawable/nav_option_background"
+            android:id="@+id/nav_video"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/img7"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/navicon1"/>
+            <TextView
+                android:layout_marginLeft="25dp"
+                android:layout_toRightOf="@+id/img7"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Video View"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
