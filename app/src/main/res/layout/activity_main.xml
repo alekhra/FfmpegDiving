@@ -7,8 +7,7 @@
     android:background="#005599"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".FFmpegActivity">
 
 
 
@@ -18,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="9dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="1dp">
 
         <Button
             android:id="@+id/select_video"
@@ -29,7 +28,9 @@
             android:text=" Select Video "
             android:textColor="@color/white" />
 
+
     </RelativeLayout>
+
 
     <VideoView
         android:layout_below="@+id/relative1"
@@ -52,6 +53,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/relative"
         >
+
         <TextView
             android:visibility="gone"
             android:id="@+id/overlaytextview"
@@ -62,14 +64,18 @@
             android:textColor="@color/white"
             android:textStyle="bold"
             android:text="Pramod"/>
+
         <ImageView
-            android:layout_centerInParent="true"
+            android:id="@+id/overlayimage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:id="@+id/overlayimage"
-            />
+            android:scaleType="fitXY" />
+        <include
+            layout="@layout/lev_nav_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </RelativeLayout>
+
     <LinearLayout
 
         android:orientation="vertical"
@@ -90,7 +96,7 @@
                 android:text="00:00"
                 android:textColor="@color/white"
                 android:layout_marginBottom="10dp"
-                />
+                android:layout_alignParentLeft="true" />
             <TextView
                 android:layout_alignParentEnd="true"
                 android:layout_weight="1"
@@ -101,7 +107,8 @@
                 android:text="00:00"
                 android:textColor="@color/white"
                 android:layout_marginBottom="10dp"
-                />
+                android:layout_alignParentRight="true"
+                android:gravity="end" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -117,7 +124,8 @@
                 app:showLabels="false"
                 app:activeColor="@color/white"
                 app:barHeight="2dp"
-                app:textAboveThumbsColor="#000000" />
+                app:textAboveThumbsColor="#000000"
+                tools:ignore="MissingClass" />
 
         </RelativeLayout>
         <LinearLayout
@@ -163,21 +171,22 @@
                             android:background="@color/transparent"
                             android:scaleType="fitXY"
                             android:src="@drawable/icon_play" />
-<!--                        <ImageButton-->
-<!--                            android:id="@+id/reverse"-->
-<!--                            android:layout_width="50dp"-->
-<!--                            android:layout_height="50dp"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:background="@color/transparent"-->
-<!--                            android:scaleType="fitXY"-->
-<!--                            android:src="@drawable/icon_effect_time" />-->
+                        <!--                        <ImageButton-->
+                        <!--                            android:id="@+id/reverse"-->
+                        <!--                            android:layout_width="50dp"-->
+                        <!--                            android:layout_height="50dp"-->
+                        <!--                            android:layout_gravity="center"-->
+                        <!--                            android:background="@color/transparent"-->
+                        <!--                            android:scaleType="fitXY"-->
+                        <!--                            android:src="@drawable/icon_effect_time" />-->
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Play"
                             android:textAlignment="center"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:gravity="center_horizontal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -201,7 +210,8 @@
                             android:layout_height="wrap_content"
                             android:text="Stop"
                             android:textAlignment="center"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:gravity="center_horizontal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -250,7 +260,8 @@
                             android:layout_height="wrap_content"
                             android:text="Process"
                             android:textAlignment="center"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:gravity="center_horizontal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -274,7 +285,8 @@
                             android:layout_height="wrap_content"
                             android:text="Keypoints"
                             android:textAlignment="center"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:gravity="center_horizontal" />
                     </LinearLayout>
 
                 </LinearLayout>

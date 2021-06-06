@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/eaa7b5ab67e1e76dbe5b6424f0faf270/jetified-rangeseekbar-library-0.3.0/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/fd4d3cbd033446434c370144e6d8449a/jetified-rangeseekbar-library-0.3.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/eaa7b5ab67e1e76dbe5b6424f0faf270/jetified-rangeseekbar-library-0.3.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/eaa7b5ab67e1e76dbe5b6424f0faf270/jetified-rangeseekbar-library-0.3.0/res" />
-      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/eaa7b5ab67e1e76dbe5b6424f0faf270/jetified-rangeseekbar-library-0.3.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/fd4d3cbd033446434c370144e6d8449a/jetified-rangeseekbar-library-0.3.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/fd4d3cbd033446434c370144e6d8449a/jetified-rangeseekbar-library-0.3.0/res" />
+      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/fd4d3cbd033446434c370144e6d8449a/jetified-rangeseekbar-library-0.3.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/modules-2/files-2.1/org.florescu.android.rangeseekbar/rangeseekbar-library/0.3.0/27aa4f62d777e0f12d69d0ce7ea12c36b5a44708/rangeseekbar-library-0.3.0-javadoc.jar!/" />
