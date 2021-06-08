@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
                 //this will run he ideo in loop i.e. the video won't stop
                 //when it reaches its duration
                 mp.setLooping(false);
+                mp.setVolume(0,0);
 
                 ProgressBar mProgressBar;
                 CountDownTimer mCountDownTimer = null;
