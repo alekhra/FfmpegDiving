@@ -2,6 +2,7 @@ package com.dfki.ffmpeg;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 //import android.support.v7.app.ActionBarDrawerToggle;
 //import android.support.v7.app.AppCompatActivity;
 //import android.support.v7.widget.Toolbar;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private String video_url;
     private VideoView videoView;
     private Runnable r;
-    private RangeSeekBar rangeSeekBar;
+    private ProgressBar progressBar;
     private static final String root= Environment.getExternalStorageDirectory().toString();
     private static final String app_folder=root+"/DSV/";
 
@@ -78,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        rangeSeekBar = (RangeSeekBar) findViewById(R.id.rangeSeekBar);
-        tvLeft = (TextView) findViewById(R.id.textleft);
+        progressBar =  findViewById(R.id.progressBar);
+        //tvLeft = (TextView) findViewById(R.id.textleft);
         tvRight = (TextView) findViewById(R.id.textright);
         slow = (ImageButton) findViewById(R.id.slow);
         process = (ImageButton) findViewById(R.id.process);
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.setType("video/*");
                 startActivityForResult(intent, 123);
                 play.setEnabled(true);
-                stop.setEnabled(true);
+                stop.setEnabled(false);
             }
         });
 
@@ -142,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 if (video_url != null) {
                     //a try-catch block to handle all necessary exceptions like File not found, IOException
                     try {
-                        slowmotion(rangeSeekBar.getSelectedMinValue().intValue() * 1000, rangeSeekBar.getSelectedMaxValue().intValue() * 1000);
+                        //slowmotion(rangeSeekBar.getSelectedMinValue().intValue() * 1000, rangeSeekBar.getSelectedMaxValue().intValue() * 1000);
                     } catch (Exception e) {
                         Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
@@ -157,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 if (video_url != null) {
 
                     try {
-                        fastforward(rangeSeekBar.getSelectedMinValue().intValue() * 1000, rangeSeekBar.getSelectedMaxValue().intValue() * 1000);
+                        //fastforward(rangeSeekBar.getSelectedMinValue().intValue() * 1000, rangeSeekBar.getSelectedMaxValue().intValue() * 1000);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
@@ -171,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (video_url != null) {
                     try {
-                        reverse(rangeSeekBar.getSelectedMinValue().intValue() * 1000, rangeSeekBar.getSelectedMaxValue().intValue() * 1000);
+                        //reverse(rangeSeekBar.getSelectedMinValue().intValue() * 1000, rangeSeekBar.getSelectedMaxValue().intValue() * 1000);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
@@ -189,22 +192,123 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPrepared(MediaPlayer mp) {
+                play.setEnabled(false);
+                stop.setEnabled(true);
+
                 //get the durtion of the video
                 int duration = mp.getDuration() / 1000;
                 //initially set the left TextView to "00:00:00"
-                tvLeft.setText("00:00:00");
+                //tvLeft.setText("00:00:00");
                 //initially set the right Text-View to the video length
                 //the getTime() method returns a formatted string in hh:mm:ss
-                tvRight.setText(getTime(mp.getDuration() / 1000));
+                //tvRight.setText(getTime(mp.getDuration() / 1000));
                 //this will run he ideo in loop i.e. the video won't stop
                 //when it reaches its duration
-                mp.setLooping(true);
+                mp.setLooping(false);
+
+                ProgressBar mProgressBar;
+                CountDownTimer mCountDownTimer = null;
+                final int[] i = {0};
+                final String[] time = new String[1];
+                final String[] newTime = new String[1];
+
+                mProgressBar=findViewById(R.id.progressBar);
+                mProgressBar.setProgress(i[0]);
+                CountDownTimer finalMCountDownTimer = mCountDownTimer;
+                final int[] milli = new int[1];
+
+                mCountDownTimer=new CountDownTimer(mp.getDuration(),100) {
+                    long millisUntilFinished = 1000;
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        if(i[0]==0){
+                            milli[0] = (int) millisUntilFinished;
+                        }
+                        Log.v("Log_tag", "Tick of Progress "+ i[0] + " "+millisUntilFinished);
+                        i[0]++;
+                        //time[0] = String.valueOf(mp.getCurrentPosition());
+                        time[0]=String.valueOf(millisUntilFinished);
+                        System.out.println("time : "+ time[0]);
+                        if (Integer.parseInt(time[0])==0 || Integer.parseInt(time[0])==1){
+                            newTime[0] = "00:00";
+                        }//if(time[0].length()<2 && Integer.parseInt(time[0])!=0){
+                            //newTime[0] = String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(0))));
+                        //}
+                        if(time[0].length()==2 && Integer.parseInt(time[0])!=0){
+                            newTime[0] = "00:"+String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(0))))
+                                    + String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(1))));
+                        }
+                        if(time[0].length()==3 && Integer.parseInt(time[0])!=0){
+                            newTime[0] = String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(0))))+
+                                     String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(1))))+":"+
+                                    String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(2))));
+                        }
+                        if(time[0].length()==4 && Integer.parseInt(time[0])!=0){
+                            newTime[0] = String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(0))))+":"
+                                    + String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(1))))+
+                                    String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(2)))) + ":"+
+                                    String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(3))));
+                        }if(time[0].length()==5){
+                             newTime[0] = String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(0))))
+                                     + String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(1))))+
+                                     ":"+
+                                     String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(2)))) +
+                                     String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(3)))) +
+                                     ":"+
+                                    String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(4))));
+                        }if(time[0].length()==6){
+                            newTime[0] = String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(0))))
+                                    + String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(1))))+
+                                    ":"+
+                                    String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(2)))) +
+                                    String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(3)))) +
+                                    ":"+
+                                    String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(4)))) +
+                                    String.valueOf(Integer.parseInt(String.valueOf(time[0].charAt(5))));
+                        }
+                        mProgressBar.setProgress(((int) i[0]*100/(mp.getDuration()/100))+5);
+
+                        tvRight.setText(newTime[0]);
+                        System.out.println(newTime[0]);
+
+
+                        //System.out.println("i:: "+ i[0]);
+
+//                        if (millisUntilFinished<=500){
+//                            finish();
+//                        }
+                        stop.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //videoView.setVideoURI(Uri.parse(video_url));
+                                videoView.stopPlayback();
+                                cancel();
+                                play.setEnabled(true);
+                            }
+                        });
+
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        //Do what you want
+                        i[0]++;
+                        mp.pause();
+                        tvRight.setText(":00");
+                        mProgressBar.setProgress(100);
+                        play.setEnabled(true);
+                    }
+                };
+                mCountDownTimer.start();
 
                 //set up the initial values of rangeSeekbar
-                rangeSeekBar.setRangeValues(0, duration);
+                /**
+                progressBar.set.setRangeValues(0, duration);
                 rangeSeekBar.setSelectedMinValue(0);
                 rangeSeekBar.setSelectedMaxValue(duration);
                 rangeSeekBar.setEnabled(true);
+
 
                 rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
                     @Override
@@ -217,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+                 **/
 
                 //this method changes the right TextView every 1 second as the video is being played
                 //It works same as a time counter we see in any Video Player
@@ -225,8 +330,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        if (videoView.getCurrentPosition() >= rangeSeekBar.getSelectedMaxValue().intValue() * 1000)
-                            videoView.seekTo(rangeSeekBar.getSelectedMinValue().intValue() * 1000);
+                        //if (videoView.getCurrentPosition() >= rangeSeekBar.getSelectedMaxValue().intValue() * 1000)
+                           // videoView.seekTo(rangeSeekBar.getSelectedMinValue().intValue() * 1000);
                         handler.postDelayed(r, 1000);
                     }
                 }, 1000);
@@ -478,5 +583,13 @@ public class MainActivity extends AppCompatActivity {
         int mn = rem / 60;
         int sec = rem % 60;
         return String.format("%02d", hr) + ":" + String.format("%02d", mn) + ":" + String.format("%02d", sec);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        //videoView.setVideoURI(Uri.parse(video_url));
+        videoView.start();
+
     }
 }
