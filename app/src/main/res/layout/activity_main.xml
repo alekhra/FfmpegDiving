@@ -265,7 +265,7 @@
                         android:orientation="vertical">
 
                         <ImageButton
-                            android:id="@+id/fast"
+                            android:id="@+id/keypoints"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center"

@@ -1,0 +1,21 @@
+# ninja log v5
+0	15	1623192527	build.ninja	aeb73f85e0df6fc8
+0	2	0	clean	53bf84300ab53f7b
+0	14	1623193361	build.ninja	aeb73f85e0df6fc8
+0	597	1623193362	CMakeFiles/native-lib.dir/opencv-utils.cpp.o	669edcdf08f3a2a4
+0	628	1623193362	CMakeFiles/native-lib.dir/native-lib.cpp.o	8c832363a66097d6
+628	642	1623193362	/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/build/intermediates/cmake/debug/obj/x86/libnative-lib.so	9a9575b39fbbd39d
+0	3	0	clean	53bf84300ab53f7b
+0	603	1623194273	CMakeFiles/native-lib.dir/opencv-utils.cpp.o	669edcdf08f3a2a4
+0	637	1623194273	CMakeFiles/native-lib.dir/native-lib.cpp.o	8c832363a66097d6
+637	650	1623194273	/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/build/intermediates/cmake/debug/obj/x86/libnative-lib.so	9a9575b39fbbd39d
+0	621	1623195358	CMakeFiles/native-lib.dir/native-lib.cpp.o	8c832363a66097d6
+621	635	1623195358	/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/build/intermediates/cmake/debug/obj/x86/libnative-lib.so	9a9575b39fbbd39d
+0	649	1623196598	CMakeFiles/native-lib.dir/native-lib.cpp.o	8c832363a66097d6
+649	663	1623196598	/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/build/intermediates/cmake/debug/obj/x86/libnative-lib.so	9a9575b39fbbd39d
+0	5	0	clean	53bf84300ab53f7b
+0	2	0	clean	53bf84300ab53f7b
+0	621	1623583715	CMakeFiles/native-lib.dir/opencv-utils.cpp.o	669edcdf08f3a2a4
+0	663	1623583715	CMakeFiles/native-lib.dir/native-lib.cpp.o	8c832363a66097d6
+663	686	1623583715	/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/build/intermediates/cmake/debug/obj/x86/libnative-lib.so	9a9575b39fbbd39d
+0	2	0	clean	53bf84300ab53f7b

@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.android.exoplayer:exoplayer-extractor:2.12.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/41be8d8f53a267386c369037fd9d754a/jetified-exoplayer-extractor-2.12.0/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/34ebed7e25cf8377590a02acf4a66b3d/jetified-exoplayer-extractor-2.12.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/41be8d8f53a267386c369037fd9d754a/jetified-exoplayer-extractor-2.12.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/41be8d8f53a267386c369037fd9d754a/jetified-exoplayer-extractor-2.12.0/res" />
-      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/41be8d8f53a267386c369037fd9d754a/jetified-exoplayer-extractor-2.12.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/34ebed7e25cf8377590a02acf4a66b3d/jetified-exoplayer-extractor-2.12.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/34ebed7e25cf8377590a02acf4a66b3d/jetified-exoplayer-extractor-2.12.0/res" />
+      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/34ebed7e25cf8377590a02acf4a66b3d/jetified-exoplayer-extractor-2.12.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/modules-2/files-2.1/com.google.android.exoplayer/exoplayer-extractor/2.12.0/d75a14a71c6597c5204081ac908941ebab107a88/exoplayer-extractor-2.12.0-javadoc.jar!/" />

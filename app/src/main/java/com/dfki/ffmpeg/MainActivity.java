@@ -2,7 +2,8 @@ package com.dfki.ffmpeg;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,56 +17,55 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import org.florescu.android.rangeseekbar.RangeSeekBar;
-
 
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
+
 import com.arthenica.mobileffmpeg.Config;
 import com.arthenica.mobileffmpeg.ExecuteCallback;
 import com.arthenica.mobileffmpeg.FFmpeg;
-import org.florescu.android.rangeseekbar.RangeSeekBar;
+
+import org.jcodec.api.android.AndroidSequenceEncoder;
+import org.jcodec.common.io.NIOUtils;
+import org.jcodec.common.io.SeekableByteChannel;
+import org.jcodec.common.model.Rational;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL;
 import static com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageButton process,slow,fast,play,stop;
+    private ImageButton process,slow,keypoints,play,stop;
     private Button select_video;
     private TextView tvLeft,tvRight;
     private ProgressDialog progressDialog;
@@ -75,25 +75,42 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private static final String root= Environment.getExternalStorageDirectory().toString();
     private static final String app_folder=root+"/DSV/";
+    private static String framespath = null;
+    // load 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+        //System.loadLibrary("opencv-utils");
+    }
+
+    /**
+     * A native method that is implemented by the 'native-lib' native library.
+     */
+    public native void  drawKpsAndBbox(Bitmap src, Bitmap bitmapOut, double[] kps_x, double[] kps_y, double kps_min_x,
+                                       double kps_min_y, double kps_max_x, double kps_max_y);
+    //public native void  drawKpsAndBbox(Bitmap src, Bitmap bitmapOut, double[] kps_x, double[] kps_y);
+    //public native String stringFromJNI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //stringFromJNI();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         progressBar =  findViewById(R.id.progressBar);
         //tvLeft = (TextView) findViewById(R.id.textleft);
         tvRight = (TextView) findViewById(R.id.textright);
         slow = (ImageButton) findViewById(R.id.slow);
         process = (ImageButton) findViewById(R.id.process);
-        fast = (ImageButton) findViewById(R.id.fast);
+        keypoints = (ImageButton) findViewById(R.id.keypoints);
         select_video = (Button) findViewById(R.id.select_video);
-        fast = (ImageButton) findViewById(R.id.fast);
+
         videoView=(VideoView) findViewById(R.id.layout_movie_wrapper);
         play = findViewById(R.id.play);
         stop = findViewById(R.id.stop);
         play.setEnabled(false);
         stop.setEnabled(false);
+        keypoints.setEnabled(false);
 
         //creating the progress dialog
         progressDialog = new ProgressDialog(MainActivity.this);
@@ -154,21 +171,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please upload video", Toast.LENGTH_SHORT).show();
             }
         });
-        fast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (video_url != null) {
 
-                    try {
-                        //fastforward(rangeSeekBar.getSelectedMinValue().intValue() * 1000, rangeSeekBar.getSelectedMaxValue().intValue() * 1000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                } else
-                    Toast.makeText(MainActivity.this, "Please select video", Toast.LENGTH_SHORT).show();
-            }
-        });
         process.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPrepared(MediaPlayer mp) {
                 play.setEnabled(false);
                 stop.setEnabled(true);
+                keypoints.setEnabled(true);
 
                 //get the durtion of the video
                 int duration = mp.getDuration() / 1000;
@@ -285,6 +289,28 @@ public class MainActivity extends AppCompatActivity {
                                 videoView.stopPlayback();
                                 cancel();
                                 play.setEnabled(true);
+                            }
+                        });
+
+                        keypoints.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (video_url != null) {
+                                    ArrayList<Bitmap> bm = null;
+
+                                    try {
+                                        videoView.stopPlayback();
+                                        cancel();
+                                        bm =plotBboxKps();
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                                    }
+
+
+                                } else
+                                    Toast.makeText(MainActivity.this, "Please select video", Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -592,5 +618,223 @@ public class MainActivity extends AppCompatActivity {
         //videoView.setVideoURI(Uri.parse(video_url));
         videoView.start();
 
+    }
+
+    /**
+     * Method for plotting bounding box and keypoints on the video
+     * @return
+     */
+    /*
+	The below code is same as above only the command is changed.
+*/
+
+    private ArrayList<Bitmap> plotBboxKps() throws Exception {
+
+        progressDialog.show();
+        String filePrefix = "bboxkps";
+        String fileExtn = ".mp4";
+        //String frames_fol= MediaStore.Video.Media.RELATIVE_PATH+"Movies/" + "Frames";
+
+        final String filePath;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+            ContentValues valuesvideos = new ContentValues();
+            valuesvideos.put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/" + "Folder/"+filePrefix);
+            valuesvideos.put(MediaStore.Video.Media.TITLE, filePrefix+System.currentTimeMillis());
+            valuesvideos.put(MediaStore.Video.Media.DISPLAY_NAME, filePrefix+System.currentTimeMillis()+fileExtn);
+            valuesvideos.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
+            valuesvideos.put(MediaStore.Video.Media.DATE_ADDED, System.currentTimeMillis() / 1000);
+            valuesvideos.put(MediaStore.Video.Media.DATE_TAKEN, System.currentTimeMillis());
+            Uri uri = getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, valuesvideos);
+            File file=FileUtils.getFileFromUri(this,uri);
+            filePath=file.getAbsolutePath();
+
+        }else{
+            filePrefix = "bboxkps";
+
+            fileExtn = ".mp4";
+            File dest = new File(new File(app_folder), filePrefix + fileExtn);
+            int fileNo = 0;
+            while (dest.exists()) {
+                fileNo++;
+                dest = new File(new File(app_folder), filePrefix + fileNo + fileExtn);
+            }
+            filePath = dest.getAbsolutePath();
+
+        }
+        String newFilepath = filePath.split(filePrefix)[0];
+        framespath = "-y -i "+video_url+" "+newFilepath+filePrefix;
+        final ArrayList<Bitmap>[] bitmaplist = new ArrayList[]{new ArrayList<Bitmap>()};
+        String finalFilePrefix = filePrefix;
+        long exeId = FFmpeg.executeAsync(framespath+"/pair_1_dslr_%05d.jpg -preset superfast ", new ExecuteCallback() {
+
+            @Override
+            public void apply(final long exeId, final int returnCode) {
+                if (returnCode == RETURN_CODE_SUCCESS) {
+                    System.out.println("########################### Executed xtraction ########################## ");
+                    try {
+                        getPlottedBitmaps(newFilepath,finalFilePrefix);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //videoView.setVideoURI(Uri.parse(filePath));
+                    //video_url = filePath;
+                    //videoView.start();
+                    progressDialog.dismiss();
+
+                } else if (returnCode == RETURN_CODE_CANCEL) {
+                    Log.i(Config.TAG, "Async command execution cancelled by user.");
+                } else {
+                    Log.i(Config.TAG, String.format("Async command execution failed with returnCode=%d.", returnCode));
+                }
+            }
+        });
+        return bitmaplist[0];
+
+    }
+
+    /**
+     *
+     * @param path : path of extracted frames folder
+     * @throws IOException
+     */
+    private void getPlottedBitmaps(String path, String prefix) throws IOException {
+        String jsonFileString= Utils.getJsonFromAssets(getApplicationContext(), "pair_1_dslr.json");
+        // initialise kps and bbox arrays
+        double [] kps_int_x = new double[16];
+        double[] kpsx_array = new double[16];
+        double[] kpsy_array = new double[16];
+        final double [] kps_int_y = new double[16];
+        final double[] bbox_int = new double[4];
+        final JSONArray[] bbox = new JSONArray[1];
+        final JSONArray[] kps = new JSONArray[1];
+
+        File f=new File(path+prefix);
+        File[] list = f.listFiles();
+
+        //final Path dir = Paths.get(path+prefix);
+        //final DirectoryStream<Path> dirStream = Files.newDirectoryStream(dir);
+        //final Stream<Path> stream = Files.list(dir);
+        List<File> newList = Arrays.stream(list).sorted().collect(Collectors.toList());
+        ArrayList<Bitmap> bitmapimages = new ArrayList<Bitmap>();
+
+
+
+        //AndroidSequenceEncoder finalSe = se;
+        //list.length
+        for(int i=1120;i<1350;i+=2){
+            System.out.println("position :: " + i);
+            //bitmapimages.add(BitmapFactory.decodeStream(new FileInputStream(list[i])));
+
+            Bitmap bitmapIn = BitmapFactory.decodeStream(new FileInputStream(newList.get(i)));
+            Bitmap bitmapOut = Bitmap.createBitmap(bitmapIn.getWidth(), bitmapIn.getHeight(),bitmapIn.getConfig());
+            //ImageView img=(ImageView)findViewById(R.id.imgPicker);
+            //img.setImageBitmap(b);
+
+            JSONObject data = Utils.getDataAtFrame(jsonFileString, i);
+            JSONObject pose = Utils.getposeDataAtFrame(jsonFileString, i);
+
+
+            try {
+                int frame_num = (int) data.get("frame-num");
+                bbox[0] = (JSONArray) data.get("bbox");
+                kps[0] = (JSONArray) pose.get("kps");
+                JSONArray com = (JSONArray) pose.get("com");
+                bbox_int[0]=(int) bbox[0].get(0);
+                bbox_int[1]=(int) bbox[0].get(1);
+                bbox_int[2]=(int) bbox[0].get(2);
+                bbox_int[3]=(int) bbox[0].get(3);
+                //bbox_int[1]=(int) bbox[0].get(1);
+                /**
+                 System.out.println(" ############ kps ######### "+  kps[0].get(0));
+                 System.out.println(" ############ com ######### "+  com);
+                 System.out.println(" ############ frame-num ######### "+  frame_num);
+                 System.out.println(" ############ bbox ######### "+ bbox[0]);
+                 System.out.println(" ############ bbox ######### "+ bbox[0].get(0));
+                 System.out.println(" ############ bbox ######### "+ bbox[0].get(1));
+                 System.out.println(" ############ bbox ######### "+ bbox[0].get(3));
+
+                 System.out.println(" ############ bbox_int ######### "+ bbox_int[0]);
+                 System.out.println(" ############ bbox_int ######### "+ bbox_int[1]);
+                 System.out.println(" ############ bbox_int ######### "+ bbox_int[2]);
+                 System.out.println(" ############ bbox_int ######### "+ bbox_int[3]);
+                 **/
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            for (int kpsitr = 0; kpsitr< kps[0].length();kpsitr++){
+                try {
+                    JSONArray kps_json = (JSONArray) kps[0].get(kpsitr);
+                    kps_int_x[kpsitr] = (double) kps_json.get(0);
+                    kps_int_y[kpsitr] = (double) kps_json.get(1);
+                    kpsx_array[kpsitr] = (double) kps_json.get(0);
+                    kpsy_array[kpsitr] = (double) kps_json.get(1);
+/**
+                    if(kpsitr == 10) {
+                        System.out.println(i+" "+ kps_int_x[kpsitr] + " "+  kps_int_y[kpsitr]);
+                        System.out.println(" ############ kps_int y ######### " + kps_int_y[kpsitr]);
+                    }
+ **/
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            //double[] kpsx_array = new double[kps_int_x.length];
+            //kpsx_array = kps_int_x;
+            //double[] kpsy_array = kps_int_y;
+            //double[] kpsy_array_sub = kps_int_y;
+
+            Arrays.sort(kpsx_array);
+            Arrays.sort(kpsy_array);
+            double kps_min_x = kpsx_array[0];
+            double kps_min_y = kpsy_array[0];
+            double kps_max_x = kpsx_array[kpsx_array.length-1];
+            double kps_max_y = kpsy_array[kpsy_array.length-1];
+
+
+            //############ drawKpsAndBbox #########
+            //Mat src = null;
+            //test(src);
+            drawKpsAndBbox(bitmapIn,bitmapOut, kps_int_x, kps_int_y, kps_min_x, kps_min_y, kps_max_x,kps_max_y);
+            //drawKpsAndBbox(bitmapIn,bitmapOut, kps_int_x, kps_int_y);
+            //System.out.println(" ############ kpsy_array_sub ######### "+ kps_int_y);
+            bitmapimages.add(bitmapOut);
+        }
+        SeekableByteChannel out = null;
+        try {
+            out = NIOUtils.writableFileChannel(path+"/Processed.mp4");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        AndroidSequenceEncoder se = new AndroidSequenceEncoder(out, Rational.R1(25));
+        // creating video with sequence encoder
+        File x = new File(path+"/Processed.mp4");
+        try {
+            se.createSequenceEncoder(x,25);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for(int vd=0; vd<bitmapimages.size(); vd++){
+            try {
+                se.encodeImage(bitmapimages.get(vd));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //vd+=2;
+        }
+        try {
+            se.finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        videoView.setVideoURI(Uri.parse(path+"/Processed.mp4"));
+        videoView.start();
+
+        //return bitmapimages;
     }
 }

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jcodec:jcodec-android:0.2.5">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/modules-2/files-2.1/org.jcodec/jcodec-android/0.2.5/5c28474a79a8df32dd0aaaec22c2f1ec385a7f67/jcodec-android-0.2.5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/modules-2/files-2.1/org.jcodec/jcodec-android/0.2.5/e5f844018c49b23e4b4dc496150be657185fdc8d/jcodec-android-0.2.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/modules-2/files-2.1/org.jcodec/jcodec-android/0.2.5/d1f8677447b006d9e1422ad1c9e48b2a4478a9d8/jcodec-android-0.2.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

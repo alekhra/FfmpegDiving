@@ -1,0 +1,9 @@
+{
+  "ndkVersionFromDsl": "20.0.5594570",
+  "sdkFolder": "/home/lekhra/Android/Sdk",
+  "sideBySideNdkFolderNames": [
+    "21.4.7075529",
+    "22.1.7171670",
+    "20.0.5594570"
+  ]
+}

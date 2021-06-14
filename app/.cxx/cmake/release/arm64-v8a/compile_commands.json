@@ -1,0 +1,13 @@
+[
+{
+  "directory": "/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/.cxx/cmake/release/arm64-v8a",
+  "command": "/home/lekhra/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android29 --gcc-toolchain=/home/lekhra/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/home/lekhra/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/sysroot  -Dnative_lib_EXPORTS -I/home/lekhra/AndroidStudioProjects/FfmpegDiving/opencv/native/jni/include  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -frtti -fexceptions -O2 -DNDEBUG  -fPIC   -o CMakeFiles/native-lib.dir/opencv-utils.cpp.o -c /home/lekhra/AndroidStudioProjects/FfmpegDiving/app/src/main/cpp/opencv-utils.cpp",
+  "file": "/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/src/main/cpp/opencv-utils.cpp"
+},
+
+{
+  "directory": "/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/.cxx/cmake/release/arm64-v8a",
+  "command": "/home/lekhra/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android29 --gcc-toolchain=/home/lekhra/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/home/lekhra/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/sysroot  -Dnative_lib_EXPORTS -I/home/lekhra/AndroidStudioProjects/FfmpegDiving/opencv/native/jni/include  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security  -frtti -fexceptions -O2 -DNDEBUG  -fPIC   -o CMakeFiles/native-lib.dir/native-lib.cpp.o -c /home/lekhra/AndroidStudioProjects/FfmpegDiving/app/src/main/cpp/native-lib.cpp",
+  "file": "/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/src/main/cpp/native-lib.cpp"
+}
+]

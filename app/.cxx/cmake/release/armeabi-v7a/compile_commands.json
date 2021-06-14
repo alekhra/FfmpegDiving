@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/.cxx/cmake/release/armeabi-v7a",
+  "command": "/home/lekhra/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=armv7-none-linux-androideabi29 --gcc-toolchain=/home/lekhra/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=/home/lekhra/Android/Sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/linux-x86_64/sysroot  -Dnative_lib_EXPORTS -I/home/lekhra/AndroidStudioProjects/FfmpegDiving/openCVSDK/native/jni/include  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -march=armv7-a -mthumb -Wa,--noexecstack -Wformat -Werror=format-security  -frtti -fexceptions -Oz -DNDEBUG  -fPIC   -o CMakeFiles/native-lib.dir/native-lib.cpp.o -c /home/lekhra/AndroidStudioProjects/FfmpegDiving/app/src/main/cpp/native-lib.cpp",
+  "file": "/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/src/main/cpp/native-lib.cpp"
+}
+]

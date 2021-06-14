@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fifty_transparent_black">
+    android:background="@color/light_blue">
 
     <TextView
         android:layout_width="match_parent"
@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/fifty_transparent_black">
+        android:background="@drawable/nav_option_background">
         <ImageView
             android:layout_weight="1"
             android:layout_width="0dp"
@@ -54,7 +54,7 @@
         <RelativeLayout
             android:id="@+id/navRl"
             android:paddingLeft="10dp"
-            android:background="@color/fifty_transparent_black"
+            android:background="@drawable/nav_option_background"
             android:clickable="true"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -78,7 +78,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:paddingLeft="10dp"
-            android:background="@color/fifty_transparent_black"
+            android:background="@drawable/nav_option_background"
             android:id="@+id/navGuideRl"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -111,7 +111,7 @@
         android:orientation="vertical">
         <RelativeLayout
             android:paddingLeft="10dp"
-            android:background="@color/fifty_transparent_black"
+            android:background="@drawable/nav_option_background"
             android:id="@+id/navAboutUrlRl"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -142,7 +142,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_height="0.3dp"
-        android:background="@color/fifty_transparent_black"/>
+        android:background="@drawable/nav_option_background"/>
     <LinearLayout
         android:layout_marginLeft="20dp"
         android:layout_width="match_parent"
@@ -150,7 +150,7 @@
         android:orientation="vertical">
         <RelativeLayout
             android:paddingLeft="10dp"
-            android:background="@color/fifty_transparent_black"
+            android:background="@drawable/nav_option_background"
             android:id="@+id/nav_camera"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -182,7 +182,7 @@
         android:orientation="vertical">
         <RelativeLayout
             android:paddingLeft="10dp"
-            android:background="@color/fifty_transparent_black"
+            android:background="@drawable/nav_option_background"
             android:id="@+id/nav_video"
             android:layout_width="match_parent"
             android:layout_height="40dp"

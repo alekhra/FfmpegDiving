@@ -1,0 +1,35 @@
+{
+  "buildFiles": [
+    "/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/src/main/cpp/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/lekhra/Android/Sdk/cmake/3.10.2.4988404/bin/ninja",
+      "-C",
+      "/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/.cxx/cmake/debug/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/lekhra/Android/Sdk/cmake/3.10.2.4988404/bin/ninja",
+    "-C",
+    "/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/.cxx/cmake/debug/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "native-lib-Debug-x86": {
+      "artifactName": "native-lib",
+      "buildCommandComponents": [
+        "/home/lekhra/Android/Sdk/cmake/3.10.2.4988404/bin/ninja",
+        "-C",
+        "/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/.cxx/cmake/debug/x86",
+        "native-lib"
+      ],
+      "abi": "x86",
+      "output": "/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/build/intermediates/cmake/debug/obj/x86/libnative-lib.so",
+      "runtimeFiles": [
+        "/home/lekhra/AndroidStudioProjects/FfmpegDiving/opencv/native/libs/x86/libopencv_java3.so"
+      ]
+    }
+  }
+}

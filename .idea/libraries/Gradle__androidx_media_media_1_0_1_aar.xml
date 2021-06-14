@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.media:media:1.0.1@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/13509c947938087e82786a1c9285fa48/media-1.0.1/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/d70aff7e58eff56ed35d1ef5c45f380b/media-1.0.1/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/13509c947938087e82786a1c9285fa48/media-1.0.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/13509c947938087e82786a1c9285fa48/media-1.0.1/res" />
-      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/13509c947938087e82786a1c9285fa48/media-1.0.1/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/d70aff7e58eff56ed35d1ef5c45f380b/media-1.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/d70aff7e58eff56ed35d1ef5c45f380b/media-1.0.1/res" />
+      <root url="file://$USER_HOME$/AndroidProjects/VideoEditor/gradle/caches/transforms-2/files-2.1/d70aff7e58eff56ed35d1ef5c45f380b/media-1.0.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
