@@ -103,7 +103,7 @@
                 android:gravity="end" />
         </RelativeLayout>
 
-        <ProgressBar
+        <SeekBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:max="100"
@@ -147,8 +147,8 @@
 
 
                     <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="77dp"
+                        android:layout_width="9dp"
+                        android:layout_height="73dp"
                         android:layout_margin="10dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -156,8 +156,8 @@
 
                         <ImageButton
                             android:id="@+id/play"
-                            android:layout_width="55dp"
-                            android:layout_height="51dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:layout_gravity="center"
                             android:background="@color/transparent"
                             android:scaleType="fitXY"
@@ -183,16 +183,16 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="77dp"
+                        android:layout_width="9dp"
+                        android:layout_height="73dp"
                         android:layout_margin="10dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
                         <ImageButton
                             android:id="@+id/stop"
-                            android:layout_width="46dp"
-                            android:layout_height="44dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:layout_gravity="center"
                             android:background="@color/transparent"
                             android:scaleType="fitXY"
@@ -208,7 +208,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="10dp"
+                        android:layout_width="9dp"
                         android:layout_height="73dp"
                         android:layout_margin="10dp"
                         android:layout_weight="1"
@@ -225,7 +225,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="    Motion"
+                            android:text="  Motion"
                             android:textAlignment="center"
                             android:textColor="@color/white" />
 
@@ -233,8 +233,8 @@
 
 
                     <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="77dp"
+                        android:layout_width="9dp"
+                        android:layout_height="73dp"
                         android:layout_margin="10dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -258,7 +258,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="27dp"
+                        android:layout_width="9dp"
                         android:layout_height="73dp"
                         android:layout_margin="10dp"
                         android:layout_weight="1"

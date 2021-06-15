@@ -16,6 +16,7 @@ import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String root= Environment.getExternalStorageDirectory().toString();
     private static final String app_folder=root+"/DSV/";
     private static String framespath = null;
+    private static int DIM_FLAG =1;
+    private static boolean VIDEO_RATIO_FLAG=true; //flag used to change the video view only once
     // load 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -117,6 +120,12 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Please wait..");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
+
+        DisplayMetrics dm;
+        dm=new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int dmheight = dm.heightPixels;
+        int dmwidth = dm.widthPixels;
 
         //set up the onClickListeners
         select_video.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +220,22 @@ public class MainActivity extends AppCompatActivity {
                 mp.setLooping(false);
                 mp.setVolume(0,0);
 
+                /**
+                 * TO CHANGE VIDEO VIEW DIMS
+                 */
+                /**
+                int left = videoView.getLeft();
+                int top = videoView.getBottom()/4;
+                int right = videoView.getRight();
+                int bottom = videoView.getBottom()/2;
+                videoView.layout(left, top, right, bottom);
+                Toast.makeText(getApplicationContext(), "Video View changed, left : "+ left + " top: "+ top + " right: "+ right + " bottom: "+ bottom, Toast.LENGTH_LONG).show();
+                VIDEO_RATIO_FLAG=false;
+                 **/
+
+
+
+
                 ProgressBar mProgressBar;
                 CountDownTimer mCountDownTimer = null;
                 final int[] i = {0};
@@ -223,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                 final int[] milli = new int[1];
 
                 mCountDownTimer=new CountDownTimer(mp.getDuration(),100) {
-                    long millisUntilFinished = 1000;
+                    //long millisUntilFinished = 1000;
                     @Override
                     public void onTick(long millisUntilFinished) {
                         if(i[0]==0){
@@ -232,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.v("Log_tag", "Tick of Progress "+ i[0] + " "+millisUntilFinished);
                         i[0]++;
                         //time[0] = String.valueOf(mp.getCurrentPosition());
-                        time[0]=String.valueOf(millisUntilFinished);
+                        time[0]=String.valueOf(mp.getDuration()-millisUntilFinished);
                         System.out.println("time : "+ time[0]);
                         if (Integer.parseInt(time[0])==0 || Integer.parseInt(time[0])==1){
                             newTime[0] = "00:00";
@@ -322,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
                         //Do what you want
                         i[0]++;
                         mp.pause();
-                        tvRight.setText(":00");
+                        //tvRight.setText(":00");
                         mProgressBar.setProgress(100);
                         play.setEnabled(true);
                     }
@@ -663,10 +688,10 @@ public class MainActivity extends AppCompatActivity {
 
         }
         String newFilepath = filePath.split(filePrefix)[0];
-        framespath = "-y -i "+video_url+" "+newFilepath+filePrefix;
+        framespath = "-y -i "+video_url+" "+"-vf scale=\"iw/"+DIM_FLAG+":ih/"+DIM_FLAG+"\" "+newFilepath+filePrefix;
         final ArrayList<Bitmap>[] bitmaplist = new ArrayList[]{new ArrayList<Bitmap>()};
         String finalFilePrefix = filePrefix;
-        long exeId = FFmpeg.executeAsync(framespath+"/pair_1_dslr_%05d.jpg -preset superfast ", new ExecuteCallback() {
+        long exeId = FFmpeg.executeAsync(framespath+"/pair_1_dslr_%05d.jpg "+"-preset superfast -threads 4 ", new ExecuteCallback() {
 
             @Override
             public void apply(final long exeId, final int returnCode) {
@@ -768,10 +793,10 @@ public class MainActivity extends AppCompatActivity {
             for (int kpsitr = 0; kpsitr< kps[0].length();kpsitr++){
                 try {
                     JSONArray kps_json = (JSONArray) kps[0].get(kpsitr);
-                    kps_int_x[kpsitr] = (double) kps_json.get(0);
-                    kps_int_y[kpsitr] = (double) kps_json.get(1);
-                    kpsx_array[kpsitr] = (double) kps_json.get(0);
-                    kpsy_array[kpsitr] = (double) kps_json.get(1);
+                    kps_int_x[kpsitr] = (double) kps_json.get(0)/DIM_FLAG;
+                    kps_int_y[kpsitr] = (double) kps_json.get(1)/DIM_FLAG;
+                    kpsx_array[kpsitr] = (double) kps_json.get(0)/DIM_FLAG;
+                    kpsy_array[kpsitr] = (double) kps_json.get(1)/DIM_FLAG;
 /**
                     if(kpsitr == 10) {
                         System.out.println(i+" "+ kps_int_x[kpsitr] + " "+  kps_int_y[kpsitr]);
