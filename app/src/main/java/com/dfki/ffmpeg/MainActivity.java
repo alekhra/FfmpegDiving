@@ -350,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
                         //tvRight.setText(":00");
                         mProgressBar.setProgress(100);
                         play.setEnabled(true);
+                        stop.setEnabled(true);
                     }
                 };
                 mCountDownTimer.start();
@@ -859,6 +860,7 @@ public class MainActivity extends AppCompatActivity {
         }
         videoView.setVideoURI(Uri.parse(path+"/Processed.mp4"));
         videoView.start();
+        video_url= path+"/Processed.mp4";
 
         //return bitmapimages;
     }
