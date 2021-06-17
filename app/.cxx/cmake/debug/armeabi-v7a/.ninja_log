@@ -1,6 +1,0 @@
-# ninja log v5
-0	636	1623183353	CMakeFiles/native-lib.dir/native-lib.cpp.o	8943e0bfc54898de
-0	677	1623183479	CMakeFiles/native-lib.dir/native-lib.cpp.o	8943e0bfc54898de
-678	733	1623183479	/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/build/intermediates/cmake/debug/obj/armeabi-v7a/libnative-lib.so	834befe39cb743f8
-0	653	1623183615	CMakeFiles/native-lib.dir/native-lib.cpp.o	8943e0bfc54898de
-1	662	1623184925	CMakeFiles/native-lib.dir/native-lib.cpp.o	8943e0bfc54898de

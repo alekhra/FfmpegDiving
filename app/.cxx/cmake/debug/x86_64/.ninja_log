@@ -1,9 +1,0 @@
-# ninja log v5
-0	653	1623193104	CMakeFiles/native-lib.dir/opencv-utils.cpp.o	f6e3655b165d51bf
-0	681	1623193104	CMakeFiles/native-lib.dir/native-lib.cpp.o	dbca9fb9a8b18c44
-1	658	1623193305	CMakeFiles/native-lib.dir/native-lib.cpp.o	dbca9fb9a8b18c44
-658	671	1623193305	/home/lekhra/AndroidStudioProjects/FfmpegDiving/app/build/intermediates/cmake/debug/obj/x86_64/libnative-lib.so	118d73004efaee03
-0	2	0	clean	53bf84300ab53f7b
-0	3	0	clean	53bf84300ab53f7b
-0	4	0	clean	53bf84300ab53f7b
-0	3	0	clean	53bf84300ab53f7b
