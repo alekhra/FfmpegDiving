@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private static String framespath = null;
     private static int DIM_FLAG =1;
     private static boolean VIDEO_RATIO_FLAG=true; //flag used to change the video view only once
+    private static String KPS_VIDEO_PATH=null;
     // load 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -350,6 +351,7 @@ public class MainActivity extends AppCompatActivity {
                         //tvRight.setText(":00");
                         mProgressBar.setProgress(100);
                         play.setEnabled(true);
+                        stop.setEnabled(true);
                     }
                 };
                 mCountDownTimer.start();
@@ -858,6 +860,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         videoView.setVideoURI(Uri.parse(path+"/Processed.mp4"));
+        video_url = path+"/Processed.mp4";
         videoView.start();
 
         //return bitmapimages;
