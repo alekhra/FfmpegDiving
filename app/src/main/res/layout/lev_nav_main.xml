@@ -8,8 +8,6 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-
-
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
@@ -22,16 +20,8 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/nav_view_right"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:fitsSystemWindows="true">
 
-        <include layout="@layout/layout_navigation_flag" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -19,17 +19,28 @@
         android:layout_marginTop="9dp"
         android:layout_marginBottom="1dp">
 
+
         <Button
             android:id="@+id/select_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:background="@color/transparent"
             android:text=" Select Video "
             android:textColor="@color/white" />
 
+        <ImageView
+            android:id="@+id/left_menu_icon"
+            android:layout_centerVertical="true"
+            android:layout_width="64dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/icon_menu_black" />
+
+
 
     </RelativeLayout>
+
 
 
     <VideoView
@@ -70,10 +81,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY" />
+
+
         <include
             layout="@layout/lev_nav_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+
+
+
+
     </RelativeLayout>
 
     <LinearLayout
