@@ -17,11 +17,16 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -30,6 +35,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.ContentValues;
 import android.os.Build;
@@ -40,6 +47,7 @@ import com.arthenica.mobileffmpeg.ExecuteCallback;
 import com.arthenica.mobileffmpeg.FFmpeg;
 
 import org.jcodec.api.android.AndroidSequenceEncoder;
+import org.jcodec.codecs.h264.io.model.AspectRatio;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.common.io.SeekableByteChannel;
 import org.jcodec.common.model.Rational;
@@ -74,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private VideoView videoView;
     private Runnable r;
     private ProgressBar progressBar;
+    private ImageView left_menu_icon;
     private static final String root= Environment.getExternalStorageDirectory().toString();
     private static final String app_folder=root+"/DSV/";
     private static String framespath = null;
@@ -89,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
      * A native method that is implemented by the 'native-lib' native library.
      */
     public native void  drawKpsAndBbox(Bitmap src, Bitmap bitmapOut, double[] kps_x, double[] kps_y, double kps_min_x,
-                                       double kps_min_y, double kps_max_x, double kps_max_y);
+                                       double kps_min_y, double kps_max_x, double kps_max_y, double[] comxlist, double[] comylist);
     //public native void  drawKpsAndBbox(Bitmap src, Bitmap bitmapOut, double[] kps_x, double[] kps_y);
     //public native String stringFromJNI();
 
@@ -107,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         process = (ImageButton) findViewById(R.id.process);
         keypoints = (ImageButton) findViewById(R.id.keypoints);
         select_video = (Button) findViewById(R.id.select_video);
+        left_menu_icon= findViewById(R.id.left_menu_icon);
 
         videoView=(VideoView) findViewById(R.id.layout_movie_wrapper);
         play = findViewById(R.id.play);
@@ -128,6 +138,19 @@ public class MainActivity extends AppCompatActivity {
         int dmwidth = dm.widthPixels;
 
         //set up the onClickListeners
+
+        left_menu_icon.setOnClickListener(new View.OnClickListener() {
+            final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            @Override
+            public void onClick(View v) {
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    drawer.openDrawer(GravityCompat.START);
+                }
+            }
+        });
+
         select_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
                 mp.setLooping(false);
                 mp.setVolume(0,0);
 
+
                 /**
                  * TO CHANGE VIDEO VIEW DIMS
                  */
@@ -232,6 +256,23 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Video View changed, left : "+ left + " top: "+ top + " right: "+ right + " bottom: "+ bottom, Toast.LENGTH_LONG).show();
                 VIDEO_RATIO_FLAG=false;
                  **/
+                //Get the display metrics
+//                DisplayMetrics metrics = new DisplayMetrics();
+//                getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//                int videoWidth = videoView.getRight(); // We cover the entire display's width
+//                int videoHeight = videoView.getBottom(); //Calculate the height based on the ratio
+
+                // Set the video size
+                SurfaceView sf = (SurfaceView) findViewById(R.id.video_decoder_gl_surface_view);
+//                ViewGroup.LayoutParams surflp = videoView.getLayoutParams();
+//                surflp.height=videoView.getBottom()/2;
+//                surflp.width=videoView.getRight();
+//                //surflp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//                //surflp.addRule(RelativeLayout.CENTER_VERTICAL);
+//                videoView.getLayoutParams().height=videoView.getBottom()/3;
+//                videoView.setLayoutParams(surflp);
+                //setVideoSize(mp, (SurfaceView) videoView.getHolder().setFixedSize(););
+                videoView.getHolder().setFixedSize(videoView.getWidth(),videoView.getHeight()/2);
 
 
 
@@ -745,11 +786,14 @@ public class MainActivity extends AppCompatActivity {
         //final Stream<Path> stream = Files.list(dir);
         List<File> newList = Arrays.stream(list).sorted().collect(Collectors.toList());
         ArrayList<Bitmap> bitmapimages = new ArrayList<Bitmap>();
+        double[] comxlist= new double[116];
+        double[] comylist= new double[116];
 
 
 
         //AndroidSequenceEncoder finalSe = se;
-        //list.length
+        //list.length1350
+        int comitr=0;
         for(int i=1120;i<1350;i+=2){
             System.out.println("position :: " + i);
             //bitmapimages.add(BitmapFactory.decodeStream(new FileInputStream(list[i])));
@@ -825,7 +869,10 @@ public class MainActivity extends AppCompatActivity {
             //############ drawKpsAndBbox #########
             //Mat src = null;
             //test(src);
-            drawKpsAndBbox(bitmapIn,bitmapOut, kps_int_x, kps_int_y, kps_min_x, kps_min_y, kps_max_x,kps_max_y);
+            comxlist[comitr]=Arrays.stream(kpsx_array).sum()/kpsx_array.length;
+            comylist[comitr]=Arrays.stream(kpsy_array).sum()/kpsy_array.length;
+            comitr++;
+            drawKpsAndBbox(bitmapIn,bitmapOut, kps_int_x, kps_int_y, kps_min_x, kps_min_y, kps_max_x,kps_max_y,comxlist,comylist);
             //drawKpsAndBbox(bitmapIn,bitmapOut, kps_int_x, kps_int_y);
             //System.out.println(" ############ kpsy_array_sub ######### "+ kps_int_y);
             bitmapimages.add(bitmapOut);
@@ -864,4 +911,31 @@ public class MainActivity extends AppCompatActivity {
 
         //return bitmapimages;
     }
+
+    private void setVideoSize(MediaPlayer mediaPlayer, SurfaceView surfaceView) {
+
+        // // Get the dimensions of the video
+        int videoWidth = mediaPlayer.getVideoWidth();
+        int videoHeight = mediaPlayer.getVideoHeight();
+        float videoProportion = (float) videoWidth / (float) videoHeight;
+
+        // Get the width of the screen
+        int screenWidth = getWindowManager().getDefaultDisplay().getWidth();
+        int screenHeight = getWindowManager().getDefaultDisplay().getHeight();
+        float screenProportion = (float) screenWidth / (float) screenHeight;
+
+        // Get the SurfaceView layout parameters
+        android.view.ViewGroup.LayoutParams lp = surfaceView.getLayoutParams();
+        if (videoProportion > screenProportion) {
+            lp.width = screenWidth;
+            lp.height = (int) ((float) screenWidth / videoProportion);
+        } else {
+            lp.width = (int) (videoProportion * (float) screenHeight);
+            lp.height = screenHeight;
+        }
+        // Commit the layout parameters
+        surfaceView.setLayoutParams(lp);
+    }
+
+
 }
