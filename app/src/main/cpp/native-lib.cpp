@@ -112,7 +112,8 @@ Java_com_dfki_ffmpeg_MainActivity_test(JNIEnv *env, jobject /* this */) {
                                                      jobject bitmapOut, jdoubleArray kps_x,
                                                      jdoubleArray kps_y, jdouble kps_min_x,
                                                      jdouble kps_min_y, jdouble kps_max_x,
-                                                     jdouble kps_max_y) {
+                                                     jdouble kps_max_y, jdoubleArray comxlist,
+                                                     jdoubleArray comylist) {
         // TODO: implement drawKpsAndBbox()
         // TODO: implement matToBitmap2()
         Mat src;
@@ -121,6 +122,7 @@ Java_com_dfki_ffmpeg_MainActivity_test(JNIEnv *env, jobject /* this */) {
         drawkps(env, src, kps_x, kps_y);
         drawbbox(env, src, kps_min_x - 15,
                  kps_min_y - 15, kps_max_x + 15, kps_max_y + 15);
+        drawcom(env, src, comxlist, comylist);
         std::string hello = "################### drawing .. ##################";
         matToBitmap(env, src, bitmapOut, true);
     }extern "C"

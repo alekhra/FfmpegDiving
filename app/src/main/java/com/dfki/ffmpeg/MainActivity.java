@@ -1,6 +1,7 @@
 package com.dfki.ffmpeg;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,10 +18,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.view.SurfaceHolder;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -47,7 +47,6 @@ import com.arthenica.mobileffmpeg.ExecuteCallback;
 import com.arthenica.mobileffmpeg.FFmpeg;
 
 import org.jcodec.api.android.AndroidSequenceEncoder;
-import org.jcodec.codecs.h264.io.model.AspectRatio;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.common.io.SeekableByteChannel;
 import org.jcodec.common.model.Rational;
@@ -59,21 +58,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL;
 import static com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static final String VIDEO_URL = "video";
     private ImageButton process,slow,keypoints,play,stop;
     private Button select_video;
     private TextView tvLeft,tvRight;
@@ -83,11 +77,16 @@ public class MainActivity extends AppCompatActivity {
     private Runnable r;
     private ProgressBar progressBar;
     private ImageView left_menu_icon;
+    private TextView pose_detection;
+    private TextView matrices;
     private static final String root= Environment.getExternalStorageDirectory().toString();
     private static final String app_folder=root+"/DSV/";
     private static String framespath = null;
-    private static int DIM_FLAG =1;
+    private static int DIM_FLAG =2;
     private static boolean VIDEO_RATIO_FLAG=true; //flag used to change the video view only once
+    CountDownTimer mCountDownTimer = null;
+
+
     // load 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -117,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
         keypoints = (ImageButton) findViewById(R.id.keypoints);
         select_video = (Button) findViewById(R.id.select_video);
         left_menu_icon= findViewById(R.id.left_menu_icon);
+        pose_detection = findViewById(R.id.pose_detection);
+        pose_detection.setEnabled(true);
+        matrices = findViewById(R.id.matrices);
 
         videoView=(VideoView) findViewById(R.id.layout_movie_wrapper);
         play = findViewById(R.id.play);
@@ -150,10 +152,36 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        pose_detection.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                videoView.stopPlayback();
+                if(mCountDownTimer!=null) {
+                    mCountDownTimer.cancel();
+                }
+                callPoseDetectionOnVideoActivity();
+                return false;
+            }
+        });
+
+        matrices.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                videoView.stopPlayback();
+                if(mCountDownTimer!=null) {
+                    mCountDownTimer.cancel();
+                }
+                callMyTableActivity();
+                return false;
+            }
+        });
 
         select_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mCountDownTimer!=null) {
+                    mCountDownTimer.cancel();
+                }
                 //create an intent to retrieve the video file from the device storage
                 Intent intent = new Intent(
                         Intent.ACTION_PICK,
@@ -219,6 +247,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+
         /*
             set up the VideoView.
             We will be using VideoView to view our video.
@@ -231,15 +262,8 @@ public class MainActivity extends AppCompatActivity {
                 stop.setEnabled(true);
                 keypoints.setEnabled(true);
 
-                //get the durtion of the video
+                //get the duartion of the video
                 int duration = mp.getDuration() / 1000;
-                //initially set the left TextView to "00:00:00"
-                //tvLeft.setText("00:00:00");
-                //initially set the right Text-View to the video length
-                //the getTime() method returns a formatted string in hh:mm:ss
-                //tvRight.setText(getTime(mp.getDuration() / 1000));
-                //this will run he ideo in loop i.e. the video won't stop
-                //when it reaches its duration
                 mp.setLooping(false);
                 mp.setVolume(0,0);
 
@@ -247,45 +271,22 @@ public class MainActivity extends AppCompatActivity {
                 /**
                  * TO CHANGE VIDEO VIEW DIMS
                  */
-                /**
-                int left = videoView.getLeft();
-                int top = videoView.getBottom()/4;
-                int right = videoView.getRight();
-                int bottom = videoView.getBottom()/2;
-                videoView.layout(left, top, right, bottom);
-                Toast.makeText(getApplicationContext(), "Video View changed, left : "+ left + " top: "+ top + " right: "+ right + " bottom: "+ bottom, Toast.LENGTH_LONG).show();
-                VIDEO_RATIO_FLAG=false;
-                 **/
-                //Get the display metrics
-//                DisplayMetrics metrics = new DisplayMetrics();
-//                getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//                int videoWidth = videoView.getRight(); // We cover the entire display's width
-//                int videoHeight = videoView.getBottom(); //Calculate the height based on the ratio
-
-                // Set the video size
-                SurfaceView sf = (SurfaceView) findViewById(R.id.video_decoder_gl_surface_view);
-//                ViewGroup.LayoutParams surflp = videoView.getLayoutParams();
-//                surflp.height=videoView.getBottom()/2;
-//                surflp.width=videoView.getRight();
-//                //surflp.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//                //surflp.addRule(RelativeLayout.CENTER_VERTICAL);
-//                videoView.getLayoutParams().height=videoView.getBottom()/3;
-//                videoView.setLayoutParams(surflp);
-                //setVideoSize(mp, (SurfaceView) videoView.getHolder().setFixedSize(););
-                videoView.getHolder().setFixedSize(videoView.getWidth(),videoView.getHeight()/2);
-
-
-
-
+                if(VIDEO_RATIO_FLAG) {
+                    RelativeLayout.LayoutParams videoViewParam;
+                    int height = (int) ((videoView.getHeight() / videoView.getWidth()) * videoView.getWidth());
+                    videoViewParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height);
+                    videoViewParam.addRule(RelativeLayout.CENTER_IN_PARENT);
+                    videoView.setLayoutParams(videoViewParam);
+                    VIDEO_RATIO_FLAG=false;
+                }
                 ProgressBar mProgressBar;
-                CountDownTimer mCountDownTimer = null;
+
                 final int[] i = {0};
                 final String[] time = new String[1];
                 final String[] newTime = new String[1];
 
                 mProgressBar=findViewById(R.id.progressBar);
                 mProgressBar.setProgress(i[0]);
-                CountDownTimer finalMCountDownTimer = mCountDownTimer;
                 final int[] milli = new int[1];
 
                 mCountDownTimer=new CountDownTimer(mp.getDuration(),100) {
@@ -340,14 +341,6 @@ public class MainActivity extends AppCompatActivity {
                         mProgressBar.setProgress(((int) i[0]*100/(mp.getDuration()/100))+5);
 
                         tvRight.setText(newTime[0]);
-                        System.out.println(newTime[0]);
-
-
-                        //System.out.println("i:: "+ i[0]);
-
-//                        if (millisUntilFinished<=500){
-//                            finish();
-//                        }
                         stop.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -373,8 +366,6 @@ public class MainActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                         Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                                     }
-
-
                                 } else
                                     Toast.makeText(MainActivity.this, "Please select video", Toast.LENGTH_SHORT).show();
                             }
@@ -395,37 +386,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
                 mCountDownTimer.start();
-
-                //set up the initial values of rangeSeekbar
-                /**
-                progressBar.set.setRangeValues(0, duration);
-                rangeSeekBar.setSelectedMinValue(0);
-                rangeSeekBar.setSelectedMaxValue(duration);
-                rangeSeekBar.setEnabled(true);
-
-
-                rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
-                    @Override
-                    public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
-                        //we seek through the video when the user drags and adjusts the seekbar
-                        videoView.seekTo((int) minValue * 1000);
-                        //changing the left and right TextView according to the minValue and maxValue
-                        tvLeft.setText(getTime((int) bar.getSelectedMinValue()));
-                        tvRight.setText(getTime((int) bar.getSelectedMaxValue()));
-
-                    }
-                });
-                 **/
-
                 //this method changes the right TextView every 1 second as the video is being played
                 //It works same as a time counter we see in any Video Player
                 final Handler handler = new Handler();
                 handler.postDelayed(r = new Runnable() {
                     @Override
                     public void run() {
-
-                        //if (videoView.getCurrentPosition() >= rangeSeekBar.getSelectedMaxValue().intValue() * 1000)
-                           // videoView.seekTo(rangeSeekBar.getSelectedMinValue().intValue() * 1000);
                         handler.postDelayed(r, 1000);
                     }
                 }, 1000);
@@ -433,7 +399,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
     /**
@@ -691,10 +656,6 @@ public class MainActivity extends AppCompatActivity {
      * Method for plotting bounding box and keypoints on the video
      * @return
      */
-    /*
-	The below code is same as above only the command is changed.
-*/
-
     private ArrayList<Bitmap> plotBboxKps() throws Exception {
 
         progressDialog.show();
@@ -733,7 +694,7 @@ public class MainActivity extends AppCompatActivity {
         framespath = "-y -i "+video_url+" "+"-vf scale=\"iw/"+DIM_FLAG+":ih/"+DIM_FLAG+"\" "+newFilepath+filePrefix;
         final ArrayList<Bitmap>[] bitmaplist = new ArrayList[]{new ArrayList<Bitmap>()};
         String finalFilePrefix = filePrefix;
-        long exeId = FFmpeg.executeAsync(framespath+"/pair_1_dslr_%05d.jpg "+"-preset superfast -threads 4 ", new ExecuteCallback() {
+        long exeId = FFmpeg.executeAsync(framespath+"/pair_1_dslr_%05d.jpg "+"-preset superfast -threads 8 ", new ExecuteCallback() {
 
             @Override
             public void apply(final long exeId, final int returnCode) {
@@ -781,32 +742,18 @@ public class MainActivity extends AppCompatActivity {
         File f=new File(path+prefix);
         File[] list = f.listFiles();
 
-        //final Path dir = Paths.get(path+prefix);
-        //final DirectoryStream<Path> dirStream = Files.newDirectoryStream(dir);
-        //final Stream<Path> stream = Files.list(dir);
         List<File> newList = Arrays.stream(list).sorted().collect(Collectors.toList());
         ArrayList<Bitmap> bitmapimages = new ArrayList<Bitmap>();
         double[] comxlist= new double[116];
         double[] comylist= new double[116];
 
-
-
-        //AndroidSequenceEncoder finalSe = se;
-        //list.length1350
         int comitr=0;
         for(int i=1120;i<1350;i+=2){
-            System.out.println("position :: " + i);
-            //bitmapimages.add(BitmapFactory.decodeStream(new FileInputStream(list[i])));
-
             Bitmap bitmapIn = BitmapFactory.decodeStream(new FileInputStream(newList.get(i)));
             Bitmap bitmapOut = Bitmap.createBitmap(bitmapIn.getWidth(), bitmapIn.getHeight(),bitmapIn.getConfig());
-            //ImageView img=(ImageView)findViewById(R.id.imgPicker);
-            //img.setImageBitmap(b);
 
             JSONObject data = Utils.getDataAtFrame(jsonFileString, i);
             JSONObject pose = Utils.getposeDataAtFrame(jsonFileString, i);
-
-
             try {
                 int frame_num = (int) data.get("frame-num");
                 bbox[0] = (JSONArray) data.get("bbox");
@@ -816,21 +763,6 @@ public class MainActivity extends AppCompatActivity {
                 bbox_int[1]=(int) bbox[0].get(1);
                 bbox_int[2]=(int) bbox[0].get(2);
                 bbox_int[3]=(int) bbox[0].get(3);
-                //bbox_int[1]=(int) bbox[0].get(1);
-                /**
-                 System.out.println(" ############ kps ######### "+  kps[0].get(0));
-                 System.out.println(" ############ com ######### "+  com);
-                 System.out.println(" ############ frame-num ######### "+  frame_num);
-                 System.out.println(" ############ bbox ######### "+ bbox[0]);
-                 System.out.println(" ############ bbox ######### "+ bbox[0].get(0));
-                 System.out.println(" ############ bbox ######### "+ bbox[0].get(1));
-                 System.out.println(" ############ bbox ######### "+ bbox[0].get(3));
-
-                 System.out.println(" ############ bbox_int ######### "+ bbox_int[0]);
-                 System.out.println(" ############ bbox_int ######### "+ bbox_int[1]);
-                 System.out.println(" ############ bbox_int ######### "+ bbox_int[2]);
-                 System.out.println(" ############ bbox_int ######### "+ bbox_int[3]);
-                 **/
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -842,22 +774,10 @@ public class MainActivity extends AppCompatActivity {
                     kps_int_y[kpsitr] = (double) kps_json.get(1)/DIM_FLAG;
                     kpsx_array[kpsitr] = (double) kps_json.get(0)/DIM_FLAG;
                     kpsy_array[kpsitr] = (double) kps_json.get(1)/DIM_FLAG;
-/**
-                    if(kpsitr == 10) {
-                        System.out.println(i+" "+ kps_int_x[kpsitr] + " "+  kps_int_y[kpsitr]);
-                        System.out.println(" ############ kps_int y ######### " + kps_int_y[kpsitr]);
-                    }
- **/
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            //double[] kpsx_array = new double[kps_int_x.length];
-            //kpsx_array = kps_int_x;
-            //double[] kpsy_array = kps_int_y;
-            //double[] kpsy_array_sub = kps_int_y;
-
             Arrays.sort(kpsx_array);
             Arrays.sort(kpsy_array);
             double kps_min_x = kpsx_array[0];
@@ -867,14 +787,10 @@ public class MainActivity extends AppCompatActivity {
 
 
             //############ drawKpsAndBbox #########
-            //Mat src = null;
-            //test(src);
             comxlist[comitr]=Arrays.stream(kpsx_array).sum()/kpsx_array.length;
             comylist[comitr]=Arrays.stream(kpsy_array).sum()/kpsy_array.length;
             comitr++;
             drawKpsAndBbox(bitmapIn,bitmapOut, kps_int_x, kps_int_y, kps_min_x, kps_min_y, kps_max_x,kps_max_y,comxlist,comylist);
-            //drawKpsAndBbox(bitmapIn,bitmapOut, kps_int_x, kps_int_y);
-            //System.out.println(" ############ kpsy_array_sub ######### "+ kps_int_y);
             bitmapimages.add(bitmapOut);
         }
         SeekableByteChannel out = null;
@@ -908,8 +824,6 @@ public class MainActivity extends AppCompatActivity {
         videoView.setVideoURI(Uri.parse(path+"/Processed.mp4"));
         videoView.start();
         video_url= path+"/Processed.mp4";
-
-        //return bitmapimages;
     }
 
     private void setVideoSize(MediaPlayer mediaPlayer, SurfaceView surfaceView) {
@@ -936,6 +850,23 @@ public class MainActivity extends AppCompatActivity {
         // Commit the layout parameters
         surfaceView.setLayoutParams(lp);
     }
+    private void callPoseDetectionOnVideoActivity(){
+        Intent intent = new Intent(this, PoseDetectionOnVideoActivity.class);
+        if(video_url==null){
+            Context context = getApplicationContext();
+            CharSequence text = "Please Select Video";
+            int duration = Toast.LENGTH_SHORT;
 
-
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+        else {
+            intent.putExtra(VIDEO_URL, video_url);
+            startActivity(intent);
+        }
+    }
+private void callMyTableActivity(){
+        Intent intent = new Intent(this, MyTableActivity.class);
+        startActivity(intent);
+    }
 }
